@@ -42,7 +42,7 @@ typing-extensions = { version = "^4.4.0", python = "<3.11" }
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = ">=2.21,<4.0"
-pytest = "^7.2.0"
+pytest = ">=7.2,<9.0"
 pytest-xdist = "^3.1.0"
 pylint = "^2.15.10"
 pylint-per-file-ignores = "^1.1.0"
