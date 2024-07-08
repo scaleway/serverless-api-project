@@ -687,7 +687,21 @@ def load_issue_from_bucket(bucket_path: str) -> Tuple[str, Issue]:
     return (saved["ts"], Issue.from_dict(saved["issue"]))
 
 
+def recover_on_exception(func: Any) -> Any:
+    """Decorator to recover from exceptions and return a 500 status code."""
+
+    def _wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            logging.error("Error: %s", e)
+            return {"statusCode": HTTPStatus.INTERNAL_SERVER_ERROR}
+
+    return _wrapper
+
+
 @app.func(description="GitHub webhook to notify on new PRs")
+@recover_on_exception
 def handle_github(event: dict[str, Any], _content: dict[str, Any]) -> dict[str, Any]:
     """Handles GitHub webhook request.
 
@@ -770,6 +784,7 @@ def handle_github(event: dict[str, Any], _content: dict[str, Any]) -> dict[str, 
 @app.func(
     min_scale=1, memory_limit=1024, description="GitLab webhook to notify on new MRs"
 )
+@recover_on_exception
 def handle_gitlab(event: dict[str, Any], _content: dict[str, Any]) -> dict[str, Any]:
     """Handles GitLab webhook request.
 
@@ -857,6 +872,7 @@ def handle_gitlab(event: dict[str, Any], _content: dict[str, Any]) -> dict[str, 
 
 
 @app.schedule(REMINDER_SCHEDULE)
+@recover_on_exception
 def pull_request_reminder(
     _event: dict[str, Any], _content: dict[str, Any]
 ) -> dict[str, Any]:
