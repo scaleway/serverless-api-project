@@ -72,7 +72,7 @@ class Developer(JSONWizard):
             name=user["login"],
             email=None,
             avatar_url=user["avatar_url"],
-            display_name=user["name"],
+            display_name=user["login"],  # GitHub does not provide a display name
         )
 
     @staticmethod
