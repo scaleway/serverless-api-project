@@ -697,6 +697,9 @@ def recover_on_exception(func: Any) -> Any:
             logging.error("Error: %s", e)
             return {"statusCode": HTTPStatus.INTERNAL_SERVER_ERROR}
 
+    # Definitely not ideal, but it's the only way to keep the function name
+    _wrapper.__name__ = func.__name__
+
     return _wrapper
 
 
