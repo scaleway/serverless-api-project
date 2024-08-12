@@ -887,6 +887,8 @@ def pull_request_reminder(
             logging.info("Ignoring %s", opened_pr.key)
             continue
 
+        logging.info("Loading PR from %s...", opened_pr.key)
+
         _, pull = load_pr_from_bucket(opened_pr.key)
         if message := pull.reminder_message():
             logging.info(
