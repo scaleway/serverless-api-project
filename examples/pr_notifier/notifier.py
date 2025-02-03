@@ -111,7 +111,7 @@ class Review(JSONWizard):
 
     @staticmethod
     def from_gitlab_action(
-        action: Literal["approval", "approved", "unapproval", "unapproved"]
+        action: Literal["approval", "approved", "unapproval", "unapproved"],
     ):
         """Creates from a GitLab action."""
         return Review(
